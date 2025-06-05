@@ -4,15 +4,15 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Readify.Data;
+using Readify.DataAccess.Data;
 
 #nullable disable
 
-namespace Readify.Migrations
+namespace Readify.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20250604093803_SeedDataInCategotyTable")]
-    partial class SeedDataInCategotyTable
+    [Migration("20250605125204_AddCategoryTableAndSeddingData")]
+    partial class AddCategoryTableAndSeddingData
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -37,7 +37,8 @@ namespace Readify.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.HasKey("Id");
 

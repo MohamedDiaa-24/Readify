@@ -2,20 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Readify.Data;
+using Readify.DataAccess.Data;
 
 #nullable disable
 
-namespace Readify.Migrations
+namespace Readify.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20250604092541_CreateCategoryTable")]
-    partial class CreateCategoryTable
+    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,11 +34,38 @@ namespace Readify.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.HasKey("Id");
 
                     b.ToTable("categories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            DisplayOrder = 1,
+                            Name = "Fiction"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            DisplayOrder = 2,
+                            Name = "History"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            DisplayOrder = 3,
+                            Name = "Science"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            DisplayOrder = 4,
+                            Name = "Philosophy"
+                        });
                 });
 #pragma warning restore 612, 618
         }

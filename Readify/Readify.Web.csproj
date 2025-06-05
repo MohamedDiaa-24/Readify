@@ -15,4 +15,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Readify.DataAccess\Readify.DataAccess.csproj" />
+  </ItemGroup>
+
 </Project>

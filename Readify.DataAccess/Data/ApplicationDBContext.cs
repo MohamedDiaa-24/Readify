@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Readify.Models;
 
-namespace Readify.Data
+namespace Readify.DataAccess.Data
 {
     public class ApplicationDBContext : DbContext
     {
