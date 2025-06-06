@@ -1,20 +1,20 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Readify.DataAccess.Data;
-using Readify.Models;
+using Readify.DataAccess.Interfaces;
 
+using Readify.Models;
 namespace Readify.Controllers
 {
     public class CategoryController : Controller
     {
-        private readonly ApplicationDBContext _dBContext;
+        private readonly ICategoryRepository _categoryRepo;
 
-        public CategoryController(ApplicationDBContext applicationDBContext)
+        public CategoryController(ICategoryRepository categoryRepo)
         {
-            _dBContext = applicationDBContext;
+            _categoryRepo = categoryRepo;
         }
         public IActionResult Index()
         {
-            var categories = _dBContext.categories.ToList();
+            var categories = _categoryRepo.GetAll().ToList();
             return View(categories);
         }
 
@@ -30,8 +30,8 @@ namespace Readify.Controllers
             if (ModelState.IsValid)
             {
 
-                _dBContext.categories.Add(model);
-                _dBContext.SaveChanges();
+                _categoryRepo.Add(model);
+                _categoryRepo.Save();
                 TempData["success"] = "Category Created successfully";
 
                 return RedirectToAction("Index", "Category");
@@ -46,7 +46,7 @@ namespace Readify.Controllers
             {
                 return NotFound();
             }
-            var category = _dBContext.categories.Find(id);
+            var category = _categoryRepo.Get(x => x.Id == id);
             if (category is null)
             {
                 return NotFound();
@@ -60,8 +60,8 @@ namespace Readify.Controllers
             if (ModelState.IsValid)
             {
 
-                _dBContext.categories.Update(model);
-                _dBContext.SaveChanges();
+                _categoryRepo.Update(model);
+                _categoryRepo.Save();
                 TempData["success"] = "Category updated successfully";
                 return RedirectToAction("Index", "Category");
             }
@@ -75,7 +75,7 @@ namespace Readify.Controllers
             {
                 return NotFound();
             }
-            var category = _dBContext.categories.Find(id);
+            var category = _categoryRepo.Get(c => c.Id == id);
             if (category is null)
             {
                 return NotFound();
@@ -85,14 +85,13 @@ namespace Readify.Controllers
         [HttpPost, ActionName("Delete")]
         public IActionResult DeletePost(int? id)
         {
-            var category = _dBContext.categories.Find(id);
+            var category = _categoryRepo.Get(x => x.Id == id);
             if (id is null || id == 0)
             {
                 return NotFound();
             }
-
-            _dBContext.categories.Remove(category);
-            _dBContext.SaveChanges();
+            _categoryRepo.Remove(category);
+            _categoryRepo.Save();
             TempData["success"] = "Category Deleted successfully";
 
             return RedirectToAction("Index", "Category");

@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Readify.DataAccess.Data;
+using Readify.DataAccess.Implementaion;
+using Readify.DataAccess.Interfaces;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +12,7 @@ builder.Services.AddDbContext<ApplicationDBContext>(opttions =>
 {
     opttions.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
