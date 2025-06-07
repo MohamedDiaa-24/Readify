@@ -5,15 +5,14 @@ namespace Readify.Controllers
 {
     public class CategoryController : Controller
     {
-        private readonly ICategoryRepository _categoryRepo;
-
-        public CategoryController(ICategoryRepository categoryRepo)
+        private readonly IUnitOfWork _unitOfWork;
+        public CategoryController(IUnitOfWork unitOfWork)
         {
-            _categoryRepo = categoryRepo;
+            _unitOfWork = unitOfWork;
         }
         public IActionResult Index()
         {
-            var categories = _categoryRepo.GetAll().ToList();
+            var categories = _unitOfWork.Category.GetAll().ToList();
             return View(categories);
         }
 
@@ -29,8 +28,8 @@ namespace Readify.Controllers
             if (ModelState.IsValid)
             {
 
-                _categoryRepo.Add(model);
-                _categoryRepo.Save();
+                _unitOfWork.Category.Add(model);
+                _unitOfWork.Save();
                 TempData["success"] = "Category Created successfully";
 
                 return RedirectToAction("Index", "Category");
@@ -45,7 +44,7 @@ namespace Readify.Controllers
             {
                 return NotFound();
             }
-            var category = _categoryRepo.Get(x => x.Id == id);
+            var category = _unitOfWork.Category.Get(x => x.Id == id);
             if (category is null)
             {
                 return NotFound();
@@ -59,8 +58,8 @@ namespace Readify.Controllers
             if (ModelState.IsValid)
             {
 
-                _categoryRepo.Update(model);
-                _categoryRepo.Save();
+                _unitOfWork.Category.Update(model);
+                _unitOfWork.Save();
                 TempData["success"] = "Category updated successfully";
                 return RedirectToAction("Index", "Category");
             }
@@ -74,7 +73,7 @@ namespace Readify.Controllers
             {
                 return NotFound();
             }
-            var category = _categoryRepo.Get(c => c.Id == id);
+            var category = _unitOfWork.Category.Get(c => c.Id == id);
             if (category is null)
             {
                 return NotFound();
@@ -84,13 +83,13 @@ namespace Readify.Controllers
         [HttpPost, ActionName("Delete")]
         public IActionResult DeletePost(int? id)
         {
-            var category = _categoryRepo.Get(x => x.Id == id);
+            var category = _unitOfWork.Category.Get(x => x.Id == id);
             if (id is null || id == 0)
             {
                 return NotFound();
             }
-            _categoryRepo.Remove(category);
-            _categoryRepo.Save();
+            _unitOfWork.Category.Remove(category);
+            _unitOfWork.Save();
             TempData["success"] = "Category Deleted successfully";
 
             return RedirectToAction("Index", "Category");

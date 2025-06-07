@@ -5,7 +5,6 @@ namespace Readify.DataAccess.Repository.Interfaces
 {
     public interface ICategoryRepository : IRepository<Category>
     {
-        void Save();
         void Update(Category category);
     }
 }

@@ -12,10 +12,7 @@ namespace Readify.DataAccess.Repository.Implementaion
             _dbContext = dBContext;
         }
 
-        public void Save()
-        {
-            _dbContext.SaveChanges();
-        }
+
 
         public void Update(Category category)
         {
