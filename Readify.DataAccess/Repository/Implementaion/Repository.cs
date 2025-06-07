@@ -1,7 +1,7 @@
 ﻿using Readify.DataAccess.Data;
-using Readify.DataAccess.Repository.IRepository;
+using Readify.DataAccess.Repository.Interfaces.IRepository;
 
-namespace Readify.DataAccess.Repository
+namespace Readify.DataAccess.Repository.Implementaion
 {
     public class Repository<T> : IRepository<T> where T : class
     {

@@ -1,7 +1,7 @@
-﻿using Readify.DataAccess.Repository.IRepository;
+﻿using Readify.DataAccess.Repository.Interfaces.IRepository;
 using Readify.Models;
 
-namespace Readify.DataAccess.Interfaces
+namespace Readify.DataAccess.Repository.Interfaces
 {
     public interface ICategoryRepository : IRepository<Category>
     {

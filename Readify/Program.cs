@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Readify.DataAccess.Data;
-using Readify.DataAccess.Implementaion;
-using Readify.DataAccess.Interfaces;
+using Readify.DataAccess.Repository.Implementaion;
+using Readify.DataAccess.Repository.Interfaces;
 
 
 var builder = WebApplication.CreateBuilder(args);

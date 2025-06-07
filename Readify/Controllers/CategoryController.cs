@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Readify.DataAccess.Interfaces;
-
+using Readify.DataAccess.Repository.Interfaces;
 using Readify.Models;
 namespace Readify.Controllers
 {

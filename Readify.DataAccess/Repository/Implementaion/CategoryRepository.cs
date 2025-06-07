@@ -1,9 +1,8 @@
 ﻿using Readify.DataAccess.Data;
-using Readify.DataAccess.Interfaces;
-using Readify.DataAccess.Repository;
+using Readify.DataAccess.Repository.Interfaces;
 using Readify.Models;
 
-namespace Readify.DataAccess.Implementaion
+namespace Readify.DataAccess.Repository.Implementaion
 {
     public class CategoryRepository : Repository<Category>, ICategoryRepository
     {
