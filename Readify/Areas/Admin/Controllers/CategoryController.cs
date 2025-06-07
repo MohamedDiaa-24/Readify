@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Readify.DataAccess.Repository.Interfaces;
 using Readify.Models;
-namespace Readify.Controllers
+namespace Readify.Web.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class CategoryController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
