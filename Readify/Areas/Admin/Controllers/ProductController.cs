@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Readify.DataAccess.Repository.Interfaces;
 using Readify.Models;
 namespace Readify.Web.Areas.Admin.Controllers
@@ -14,12 +15,21 @@ namespace Readify.Web.Areas.Admin.Controllers
         public IActionResult Index()
         {
             var products = _unitOfWork.Product.GetAll().ToList();
+
+
             return View(products);
         }
 
 
         public IActionResult Create()
         {
+            IEnumerable<SelectListItem> categoryList = _unitOfWork.Category.GetAll()
+        .Select(c => new SelectListItem
+        {
+            Text = c.Name,
+            Value = c.Id.ToString()
+        });
+            ViewData["categoryList"] = categoryList;
             return View();
         }
         [HttpPost]

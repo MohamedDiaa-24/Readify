@@ -18,7 +18,14 @@
             <label asp-for ="Description"></label>
             <span asp-validation-for="Description" class="text-danger"></span>
         </div>
+        <div class="mb-3 row">
+            <label asp-for="CategoryID"></label>
+            <select asp-for="CategoryID" asp-items="@(ViewData["categoryList"]) as IEnumerable<SelectListItem>" class="form-control">
 
+                <option selected disabled>-- Select Category --</option>
+            </select>
+            <span asp-validation-for="CategoryID" class="text-danger"></span>
+        </div>
         <div class="mb-3 row">
             <label asp-for="ISBN"></label>
             <input asp-for="ISBN" class="form-control" />
@@ -54,6 +61,9 @@
             <input asp-for="Price100" class="form-control" />
             <span asp-validation-for="Price100" class="text-danger"></span>
         </div>
+
+   
+
        <div class="row">
            <div class="col-6">
                 <button type="submit" class="btn btn-primary form-control">Create</button>
