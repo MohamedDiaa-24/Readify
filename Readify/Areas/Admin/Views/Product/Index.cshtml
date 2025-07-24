@@ -5,7 +5,7 @@
             <h2>Product List</h2>
         </div>
         <div class="col-6 text-end">
-        <a asp-controller="Product" asp-action="Create" class="btn btn-primary">  <i class="bi bi-plus-circle-fill"></i> Create New Product</a>
+        <a asp-controller="Product" asp-action="Upsert" class="btn btn-primary">  <i class="bi bi-plus-circle-fill"></i> Create New Product</a>
         </div>
     </div>
     <table class="table table-bordered table-hover table-striped">
@@ -31,7 +31,7 @@
                     <td>
                         <div class="btn-group d-flex align-content-center">
 
-                            <a asp-action="Edit" asp-controller="Product" asp-route-id="@product.Id" class="btn btn-primary mx-2"><i class="bi bi-pencil"></i> Edit</a>
+                            <a asp-action="Upsert" asp-controller="Product" asp-route-id="@product.Id" class="btn btn-primary mx-2"><i class="bi bi-pencil"></i> Edit</a>
                             <a asp-action="Delete" asp-controller="Product" asp-route-id="@product.Id" class="btn btn-priamry mx-2"><i class="bi bi-trash-fill"></i> Delete</a>
                         </div>
                     </td>
