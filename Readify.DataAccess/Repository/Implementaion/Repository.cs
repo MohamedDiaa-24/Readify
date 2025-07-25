@@ -27,7 +27,7 @@ namespace Readify.DataAccess.Repository.Implementaion
 
                 foreach (var prop in includeProperties.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                 {
-                    query.Include(prop);
+                    query = query.Include(prop);
                 }
             }
             return query.FirstOrDefault();
