@@ -1,4 +1,5 @@
-﻿using Readify.DataAccess.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using Readify.DataAccess.Data;
 using Readify.DataAccess.Repository.Interfaces.IRepository;
 
 namespace Readify.DataAccess.Repository.Implementaion
@@ -10,6 +11,7 @@ namespace Readify.DataAccess.Repository.Implementaion
         public Repository(ApplicationDBContext dBContext)
         {
             _dbContext = dBContext;
+            _dbContext.Products.Include(p => p.Category);
         }
 
         public void Add(T entity)
@@ -17,15 +19,33 @@ namespace Readify.DataAccess.Repository.Implementaion
             _dbContext.Set<T>().Add(entity);
         }
 
-        public T Get(System.Linq.Expressions.Expression<Func<T, bool>> filter)
+        public T Get(System.Linq.Expressions.Expression<Func<T, bool>> filter, string? includeProperties = null)
         {
             IQueryable<T> query = _dbContext.Set<T>().Where(filter);
+            if (!string.IsNullOrEmpty(includeProperties))
+            {
+
+                foreach (var prop in includeProperties.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query.Include(prop);
+                }
+            }
             return query.FirstOrDefault();
         }
 
-        public IEnumerable<T> GetAll()
+        public IEnumerable<T> GetAll(string? includeProperties = null)
         {
-            return _dbContext.Set<T>().ToList();
+            IQueryable<T> query = _dbContext.Set<T>();
+            if (!string.IsNullOrEmpty(includeProperties))
+            {
+
+                foreach (var prop in includeProperties.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(prop);
+                }
+            }
+
+            return query.ToList();
         }
 
         public void Remove(T entity)

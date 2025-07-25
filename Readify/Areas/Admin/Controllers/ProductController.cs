@@ -9,13 +9,15 @@ namespace Readify.Web.Areas.Admin.Controllers
     public class ProductController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
-        public ProductController(IUnitOfWork unitOfWork)
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        public ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment)
         {
             _unitOfWork = unitOfWork;
+            _webHostEnvironment = webHostEnvironment;
         }
         public IActionResult Index()
         {
-            var products = _unitOfWork.Product.GetAll().ToList();
+            var products = _unitOfWork.Product.GetAll(includeProperties: "Category").ToList();
 
 
             return View(products);
@@ -52,13 +54,44 @@ namespace Readify.Web.Areas.Admin.Controllers
 
         }
         [HttpPost]
-        public IActionResult Upsert(ProductVM model, IFormFile file) //Upsert ==>[(Up)date][in(sert)]
+        public IActionResult Upsert(ProductVM model, IFormFile? file) //Upsert ==>[(Up)date][in(sert)]
         {
+
+            string wwrootPath = _webHostEnvironment.WebRootPath;
 
             if (ModelState.IsValid)
             {
+                if (file is not null)
+                {
+                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                    string productPath = Path.Combine(wwrootPath, @"images\product");
 
-                _unitOfWork.Product.Add(model.Product);
+                    if (!string.IsNullOrEmpty(model.Product.ImageURL))
+                    {
+                        string oldPath = Path.Combine(wwrootPath, model.Product.ImageURL);
+                        if (System.IO.File.Exists(oldPath))
+                        {
+                            System.IO.File.Delete(oldPath);
+                        }
+                    }
+
+
+                    using (FileStream fileStream = new FileStream(Path.Combine(productPath, fileName), FileMode.Create))
+                    {
+                        file.CopyTo(fileStream);
+                    }
+                    model.Product.ImageURL = @"images\product\" + fileName;
+                }
+
+                if (model.Product.Id == 0)
+                {
+                    _unitOfWork.Product.Add(model.Product);
+                }
+                else
+                {
+                    _unitOfWork.Product.Update(model.Product);
+                }
+
                 _unitOfWork.Save();
                 TempData["success"] = "Product Created successfully";
 
@@ -80,35 +113,6 @@ namespace Readify.Web.Areas.Admin.Controllers
 
 
         }
-
-        //public IActionResult Edit(int? id)
-        //{
-        //    if (id is null || id == 0)
-        //    {
-        //        return NotFound();
-        //    }
-        //    var Product = _unitOfWork.Product.Get(x => x.Id == id);
-        //    if (Product is null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return View(Product);
-        //}
-        //[HttpPost]
-        //public IActionResult Edit(Product model)
-        //{
-
-        //    if (ModelState.IsValid)
-        //    {
-
-        //        _unitOfWork.Product.Update(model);
-        //        _unitOfWork.Save();
-        //        TempData["success"] = "Product updated successfully";
-        //        return RedirectToAction("Index", "Product");
-        //    }
-
-        //    return View();
-        //}
 
         public IActionResult Delete(int? id)
         {

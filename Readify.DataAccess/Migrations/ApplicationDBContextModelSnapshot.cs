@@ -39,7 +39,7 @@ namespace Readify.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("categories");
+                    b.ToTable("categories", (string)null);
 
                     b.HasData(
                         new
@@ -115,7 +115,7 @@ namespace Readify.DataAccess.Migrations
 
                     b.HasIndex("CategoryID");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
 
                     b.HasData(
                         new

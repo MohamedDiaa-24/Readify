@@ -37,7 +37,8 @@ namespace Readify.Models
         [Range(1, 1000)]
         public double Price100 { get; set; }
         [ValidateNever]
-        public string ImageURL { get; set; } = "";
+        [Display(Name = "Image")]
+        public string? ImageURL { get; set; }
         public int CategoryID { get; set; }
         [ForeignKey("CategoryID")]
         [ValidateNever]
