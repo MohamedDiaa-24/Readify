@@ -1,7 +1,10 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Readify.DataAccess.Data;
 using Readify.DataAccess.Repository.Implementaion;
 using Readify.DataAccess.Repository.Interfaces;
+using Readify.Utility;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,9 +15,19 @@ builder.Services.AddDbContext<ApplicationDBContext>(opttions =>
 {
     opttions.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
+builder.Services.AddRazorPages();
+builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDBContext>().AddDefaultTokenProviders();
+builder.Services.ConfigureApplicationCookie(conf =>
+{
+    conf.LoginPath = $"/Identity/Account/Login";
+    conf.LogoutPath = $"/Identity/Account/Logout";
+    conf.AccessDeniedPath = $"/Identity/Account/AccessDenied";
+});
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IEmailSender, EmailSender>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -29,9 +42,9 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
-
+app.MapRazorPages();
 app.MapControllerRoute(
     name: "default",
     pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}");
