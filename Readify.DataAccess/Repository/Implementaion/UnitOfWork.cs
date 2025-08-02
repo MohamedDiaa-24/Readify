@@ -7,12 +7,14 @@ namespace Readify.DataAccess.Repository.Implementaion
     {
         public ICategoryRepository Category { get; private set; }
         public IProductRepository Product { get; private set; }
+        public ICompanyRepository Company { get; private set; }
         private ApplicationDBContext _dbContext;
         public UnitOfWork(ApplicationDBContext dBContext)
         {
             _dbContext = dBContext;
             Category = new CategoryRepository(_dbContext);
             Product = new ProductRepository(_dbContext);
+            Company = new CompanyRepository(_dbContext);
         }
 
         public void Save()

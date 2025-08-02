@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Readify.DataAccess.Data;
 
@@ -11,9 +12,11 @@ using Readify.DataAccess.Data;
 namespace Readify.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20250802221618_AddCompanyTable")]
+    partial class AddCompanyTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -306,38 +309,6 @@ namespace Readify.DataAccess.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("Companies");
-
-                    b.HasData(
-                        new
-                        {
-                            ID = 1,
-                            City = "Tech City",
-                            Name = "Tech Solution",
-                            PhoneNumber = "6669990000",
-                            PostalCode = "12121",
-                            State = "IL",
-                            StreetAddress = "123 Tech St"
-                        },
-                        new
-                        {
-                            ID = 2,
-                            City = "Vid City",
-                            Name = "Vivid Books",
-                            PhoneNumber = "7779990000",
-                            PostalCode = "66666",
-                            State = "IL",
-                            StreetAddress = "999 Vid St"
-                        },
-                        new
-                        {
-                            ID = 3,
-                            City = "Lala land",
-                            Name = "Readers Club",
-                            PhoneNumber = "1113335555",
-                            PostalCode = "99999",
-                            State = "NY",
-                            StreetAddress = "999 Main St"
-                        });
                 });
 
             modelBuilder.Entity("Readify.Models.Product", b =>
@@ -476,9 +447,6 @@ namespace Readify.DataAccess.Migrations
                     b.Property<string>("City")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("CompanyId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -491,8 +459,6 @@ namespace Readify.DataAccess.Migrations
 
                     b.Property<string>("state")
                         .HasColumnType("nvarchar(max)");
-
-                    b.HasIndex("CompanyId");
 
                     b.HasDiscriminator().HasValue("ApplicationUser");
                 });
@@ -557,15 +523,6 @@ namespace Readify.DataAccess.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("Readify.Models.ApplicationUser", b =>
-                {
-                    b.HasOne("Readify.Models.Company", "Company")
-                        .WithMany()
-                        .HasForeignKey("CompanyId");
-
-                    b.Navigation("Company");
                 });
 #pragma warning restore 612, 618
         }

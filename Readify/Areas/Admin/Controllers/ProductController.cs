@@ -6,6 +6,7 @@ using Readify.Models.ViewModels;
 namespace Readify.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    //[Authorize(Roles = StaticDetails.Role_Admin)]
     public class ProductController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
