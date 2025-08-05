@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Readify.DataAccess.Data;
 using Readify.DataAccess.Repository.Interfaces.IRepository;
+using System.Linq.Expressions;
 
 namespace Readify.DataAccess.Repository.Implementaion
 {
@@ -19,9 +20,19 @@ namespace Readify.DataAccess.Repository.Implementaion
             _dbContext.Set<T>().Add(entity);
         }
 
-        public T Get(System.Linq.Expressions.Expression<Func<T, bool>> filter, string? includeProperties = null)
+        public T Get(System.Linq.Expressions.Expression<Func<T, bool>> filter, string? includeProperties = null, bool tracked = false)
         {
-            IQueryable<T> query = _dbContext.Set<T>().Where(filter);
+            IQueryable<T> query;
+            if (tracked)
+            {
+                query = _dbContext.Set<T>().Where(filter);
+
+            }
+            else
+            {
+                query = _dbContext.Set<T>().AsNoTracking().Where(filter);
+            }
+
             if (!string.IsNullOrEmpty(includeProperties))
             {
 
@@ -33,9 +44,13 @@ namespace Readify.DataAccess.Repository.Implementaion
             return query.FirstOrDefault();
         }
 
-        public IEnumerable<T> GetAll(string? includeProperties = null)
+        public IEnumerable<T> GetAll(Expression<Func<T, bool>>? filter = null, string? includeProperties = null)
         {
             IQueryable<T> query = _dbContext.Set<T>();
+            if (filter is not null)
+            {
+                query = query.Where(filter);
+            }
             if (!string.IsNullOrEmpty(includeProperties))
             {
 

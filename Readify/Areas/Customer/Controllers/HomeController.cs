@@ -1,6 +1,8 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Readify.DataAccess.Repository.Interfaces;
 using Readify.Models;
+using System.Security.Claims;
 
 namespace Readify.Web.Areas.Customer.Controllers
 {
@@ -19,17 +21,47 @@ namespace Readify.Web.Areas.Customer.Controllers
         public IActionResult Index()
         {
 
-            IEnumerable<Product> products = _unitOfWork.Product.GetAll("Category");
+            IEnumerable<Product> products = _unitOfWork.Product.GetAll(includeProperties: "Category");
 
             return View(products);
         }
 
         public IActionResult Details(int id)
         {
+            ShoppingCart shoppingCart = new ShoppingCart
+            {
+                Product = _unitOfWork.Product.Get(p => p.Id == id, "Category"),
+                Count = 1,
+                ProductId = id
+            };
 
-            Product product = _unitOfWork.Product.Get(p => p.Id == id, "Category");
+            return View(shoppingCart);
+        }
+        [HttpPost]
+        [Authorize]
+        public IActionResult Details(ShoppingCart shoppingCart)
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+            shoppingCart.ApplicationUserID = userId;
 
-            return View(product);
+            ShoppingCart cartFormDb = _unitOfWork.ShoppingCart.Get(c => c.ApplicationUserID == userId
+            && c.ProductId == shoppingCart.ProductId);
+
+            if (cartFormDb is not null)
+            {
+                cartFormDb.Count += shoppingCart.Count;
+                _unitOfWork.ShoppingCart.Update(cartFormDb);
+            }
+            else
+            {
+                _unitOfWork.ShoppingCart.Add(shoppingCart);
+
+            }
+            _unitOfWork.Save();
+
+            TempData["success"] = "Cart updated successfully";
+            return RedirectToAction(nameof(Index));
         }
     }
 }
