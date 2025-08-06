@@ -28,6 +28,7 @@ builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IEmailSender, EmailSender>();
+builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -40,7 +41,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
+Stripe.StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe:Secretkey").Get<string>();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();

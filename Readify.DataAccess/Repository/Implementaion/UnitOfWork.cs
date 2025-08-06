@@ -11,6 +11,10 @@ namespace Readify.DataAccess.Repository.Implementaion
         public IShoppingCartRepository ShoppingCart { get; private set; }
         public IApplicationUserRepository ApplicationUser { get; private set; }
 
+        public IOrderDetailRepository OrderDetail { get; private set; }
+
+        public IOrderHeaderRepository OrderHeader { get; private set; }
+
         private ApplicationDBContext _dbContext;
         public UnitOfWork(ApplicationDBContext dBContext)
         {
@@ -20,6 +24,8 @@ namespace Readify.DataAccess.Repository.Implementaion
             Company = new CompanyRepository(_dbContext);
             ShoppingCart = new ShoppingCartRepository(_dbContext);
             ApplicationUser = new ApplicationUserRepository(_dbContext);
+            OrderDetail = new OrderDetailRepository(_dbContext);
+            OrderHeader = new OrderHeaderRepository(_dbContext);
         }
 
         public void Save()
