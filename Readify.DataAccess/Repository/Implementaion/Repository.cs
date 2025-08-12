@@ -36,7 +36,7 @@ namespace Readify.DataAccess.Repository.Implementaion
             if (!string.IsNullOrEmpty(includeProperties))
             {
 
-                foreach (var prop in includeProperties.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                foreach (var prop in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                 {
                     query = query.Include(prop);
                 }
@@ -54,7 +54,7 @@ namespace Readify.DataAccess.Repository.Implementaion
             if (!string.IsNullOrEmpty(includeProperties))
             {
 
-                foreach (var prop in includeProperties.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                foreach (var prop in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                 {
                     query = query.Include(prop);
                 }
