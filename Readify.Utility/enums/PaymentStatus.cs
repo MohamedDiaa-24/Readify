@@ -6,6 +6,8 @@
         Pending,
         Approved,
         DelayedPayment,
-        Rejected
+        Rejected,
+        Cancelled,
+        Refunded
     }
 }
