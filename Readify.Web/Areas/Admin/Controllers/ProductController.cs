@@ -1,12 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Readify.DataAccess.Repository.Interfaces;
 using Readify.Models;
 using Readify.Models.ViewModels;
+using Readify.Utility;
 namespace Readify.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    //[Authorize(Roles = StaticDetails.Role_Admin)]
+    [Authorize(Roles = StaticDetails.Role_Admin)]
     public class ProductController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
