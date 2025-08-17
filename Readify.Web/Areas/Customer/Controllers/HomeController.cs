@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Readify.DataAccess.Repository.Interfaces;
 using Readify.Models;
+using Readify.Utility;
 using System.Security.Claims;
 
 namespace Readify.Web.Areas.Customer.Controllers
@@ -52,13 +53,17 @@ namespace Readify.Web.Areas.Customer.Controllers
             {
                 cartFormDb.Count += shoppingCart.Count;
                 _unitOfWork.ShoppingCart.Update(cartFormDb);
+                _unitOfWork.Save();
+
             }
             else
             {
                 _unitOfWork.ShoppingCart.Add(shoppingCart);
+                _unitOfWork.Save();
 
+                HttpContext.Session.SetInt32(StaticDetails.SessionCart,
+                    _unitOfWork.ShoppingCart.GetAll(c => c.ApplicationUserID == userId).Count());
             }
-            _unitOfWork.Save();
 
             TempData["success"] = "Cart updated successfully";
             return RedirectToAction(nameof(Index));

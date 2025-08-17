@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Readify.DataAccess.Repository.Interfaces;
 using Readify.Models;
 using Readify.Models.ViewModels;
+using Readify.Utility;
 using Readify.Utility.enums;
 using Stripe.Checkout;
 using System.Security.Claims;
@@ -53,9 +54,12 @@ namespace Readify.Web.Areas.Customer.Controllers
 
         public IActionResult Minus(int cartId)
         {
-            var cartFromDB = _unitOfWork.ShoppingCart.Get(c => c.Id == cartId);
+            var cartFromDB = _unitOfWork.ShoppingCart.Get(c => c.Id == cartId, tracked: true);
             if (cartFromDB.Count <= 1)
             {
+                HttpContext.Session.SetInt32(StaticDetails.SessionCart, _unitOfWork.ShoppingCart
+                            .GetAll(u => u.ApplicationUserID == cartFromDB.ApplicationUserID).Count() - 1);
+
                 _unitOfWork.ShoppingCart.Remove(cartFromDB);
             }
             else
@@ -70,8 +74,10 @@ namespace Readify.Web.Areas.Customer.Controllers
 
         public IActionResult Remove(int cartId)
         {
-            var cartFromDB = _unitOfWork.ShoppingCart.Get(c => c.Id == cartId);
+            var cartFromDB = _unitOfWork.ShoppingCart.Get(c => c.Id == cartId, tracked: true);
 
+            HttpContext.Session.SetInt32(StaticDetails.SessionCart, _unitOfWork.ShoppingCart
+            .GetAll(u => u.ApplicationUserID == cartFromDB.ApplicationUserID).Count() - 1);
             _unitOfWork.ShoppingCart.Remove(cartFromDB);
 
             _unitOfWork.Save();
