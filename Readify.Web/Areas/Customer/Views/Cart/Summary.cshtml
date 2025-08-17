@@ -31,7 +31,7 @@
 								</div>
 								<div class="col-9">
 									<input asp-for="@Model.OrderHeader.Name" class="form-control" />
-									<span asp-validation-for="@Model.OrderHeader.Name"></span>
+									<span class="text-danger" asp-validation-for="@Model.OrderHeader.Name"></span>
 								</div>
 							</div>
 							<div class="row my-1">
@@ -40,7 +40,7 @@
 								</div>
 								<div class="col-9">
 									<input asp-for="@Model.OrderHeader.PhoneNumber" class="form-control" />
-									<span asp-validation-for="@Model.OrderHeader.PhoneNumber"></span>
+									<span class="text-danger" asp-validation-for="@Model.OrderHeader.PhoneNumber"></span>
 								</div>
 							</div>
 							<div class="row my-1">
@@ -49,7 +49,7 @@
 								</div>
 								<div class="col-9">
 									<input asp-for="@Model.OrderHeader.StreetAddress" class="form-control" />
-									<span asp-validation-for="@Model.OrderHeader.StreetAddress"></span>
+									<span class="text-danger" asp-validation-for="@Model.OrderHeader.StreetAddress"></span>
 								</div>
 							</div>
 							<div class="row my-1">
@@ -58,7 +58,7 @@
 								</div>
 								<div class="col-9">
 									<input asp-for="@Model.OrderHeader.City" class="form-control" />
-									<span asp-validation-for="@Model.OrderHeader.City"></span>
+									<span class="text-danger" asp-validation-for="@Model.OrderHeader.City"></span>
 								</div>
 							</div>
 							<div class="row my-1">
@@ -67,7 +67,7 @@
 								</div>
 								<div class="col-9">
 									<input asp-for="@Model.OrderHeader.State" class="form-control" />
-									<span asp-validation-for="@Model.OrderHeader.State"></span>
+									<span class="text-danger" asp-validation-for="@Model.OrderHeader.State"></span>
 								</div>
 							</div>
 							<div class="row my-1">
@@ -76,7 +76,7 @@
 								</div>
 								<div class="col-9">
 									<input asp-for="@Model.OrderHeader.PostalCode" class="form-control" />
-									<span asp-validation-for="@Model.OrderHeader.PostalCode"></span>
+									<span class="text-danger" asp-validation-for="@Model.OrderHeader.PostalCode"></span>
 								</div>
 							</div>
 						</div>
@@ -122,3 +122,7 @@
 		</div>
 	</div>
 </form>
+
+@section scripts {
+	<partial name="_ValidationScriptsPartial" />
+}

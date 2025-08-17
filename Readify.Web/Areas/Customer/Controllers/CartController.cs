@@ -223,6 +223,7 @@ namespace Readify.Web.Areas.Customer.Controllers
                     _unitOfWork.OrderHeader.UpdateStatus(orderHeader.Id, OrderStatus.Approved, PaymentStatus.Approved);
                     _unitOfWork.Save();
                 }
+                HttpContext.Session.Remove(StaticDetails.SessionCart);
             }
 
             List<ShoppingCart> shoppingCarts = _unitOfWork.ShoppingCart
