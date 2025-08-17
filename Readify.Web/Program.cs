@@ -1,3 +1,4 @@
+﻿using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
@@ -33,6 +34,28 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
+builder.Services.AddAuthentication().AddFacebook(options =>
+{
+    options.AppId = "1391509298574104";
+    options.AppSecret = "2689b938b4a19f66b9b98dcc10a5008b";
+    options.Events = new OAuthEvents
+    {
+        OnRemoteFailure = context =>
+        {
+            if (context.Failure != null && context.Failure.Message.Contains("denied"))
+            {
+                context.Response.Redirect("Identity/Account/Login?error=cancelled");
+            }
+            else
+            {
+                context.Response.Redirect("Identity/Account/Login?error=" + context.Failure?.Message);
+            }
+
+            context.HandleResponse();
+            return Task.CompletedTask;
+        }
+    };
+});
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
