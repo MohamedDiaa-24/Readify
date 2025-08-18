@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Readify.DataAccess.Repository.Interfaces;
 using Readify.Models;
@@ -15,11 +16,14 @@ namespace Readify.Web.Areas.Customer.Controllers
     public class CartController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IEmailSender _emailSender;
+
         [BindProperty]
         public ShoppingCartVM ShoppingCartVM { get; set; }
-        public CartController(IUnitOfWork unitOfWork)
+        public CartController(IUnitOfWork unitOfWork, IEmailSender emailSender)
         {
             _unitOfWork = unitOfWork;
+            this._emailSender = emailSender;
         }
 
 
@@ -226,6 +230,8 @@ namespace Readify.Web.Areas.Customer.Controllers
                 HttpContext.Session.Remove(StaticDetails.SessionCart);
             }
 
+            _emailSender.SendEmailAsync(orderHeader.ApplicationUser.Email, "New Order - Readify",
+                $"<p>New Order Created - {orderHeader.Id}</p>");
             List<ShoppingCart> shoppingCarts = _unitOfWork.ShoppingCart
                 .GetAll(s => s.ApplicationUserID == orderHeader.ApplicationUserId)
                 .ToList();
